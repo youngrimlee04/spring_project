@@ -21,7 +21,7 @@ public class ShopDao {
 				map.get("name"), map.get("address"), map.get("lat"), map.get("lng"));
 	}
 
-	public List<Map<String, Object>> findAll(Map<String, Object> map) {
+	public List<Map<String, Object>> findAll(Map<String, Object> map) { // 반경 ? m 이내에 있는 매장 찾기
 		StringBuffer sql = new StringBuffer();
 	
 		sql.append("SELECT S.*, SI.FILE_NM");

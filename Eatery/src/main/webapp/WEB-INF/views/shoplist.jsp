@@ -9,10 +9,15 @@
   <!-- Links -->
   <ul class="navbar-nav">
     <li class="nav-item">
+      <a class="nav-link" href="shop?">반경 500m 이내 매장 검색</a>
+    </li>
+    <li class="nav-item">
       <a class="nav-link" href="register">매장 등록</a>
     </li>
+    <li class="nav-item">
+      <a class="nav-link" href="shop?">반경 1km 이내 매장 검색</a>
+    </li>
   </ul>
-
 </nav>
 
 <div class="container-fluid">
@@ -49,3 +54,16 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script>
+navigator.geolocation.getCurrentPosition(function(pos) {
+	var latitude = pos.coords.latitude;
+	var longitude = pos.coords.longitude;
+	console.log(latitude, longitude)
+	
+	var param = "lat=" + latitude + "&lng=" + longitude + "&distance=0.5";
+	$("a.nav-link:first").attr('href', "shop?" + param);
+	
+	var param = "lat=" + latitude + "&lng=" + longitude + "&distance=1";
+	$("a.nav-link:last").attr('href', "shop?" + param);
+	})
+</script>
