@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="write">
+	<select id="selectById" resultType="map" parameterType="_int">
+		SELECT ID,
+		TITLE, CONTENT, HIT, WRITER, WRITE_DATE, GRP,
+		ORD, LEVEL, FILE1, FILE2
+		FROM `TABLE`
+		WHERE ID =#{value}
+	</select>
+	<select id="totalCount" resultType="java.lang.Integer">
+		<!-- 전체 데이터 수 알아내기 -->
+		SELECT COUNT(1)
+		FROM `TABLE`
+	</select>
+	<select id="selectAll" resultType="java.util.Map"
+		parameterType="map">
+		SELECT ID, TITLE, CONTENT, HIT, WRITER, WRITE_DATE, GRP,
+		ORD, LEVEL,
+		FILE1, FILE2
+		FROM `TABLE`
+		<where>
+			<if test='search !=""'>
+				TITLE LIKE CONCAT('%', #{search}, '%')
+			</if>
+		</where>
+		ORDER BY ID DESC
+		LIMIT #{startRow}, 10
+	</select>
+	<update id="update" parameterType="map">
+		UPDATE `TABLE` SET
+		TITLE =
+		#{title}, CONTENT = #{content}
+		WHERE ID = #{id}
+	</update>
+	<delete id="delete" parameterType="_int">
+		DELETE FROM `TABLE`
+		WHERE ID = #{value}
+	</delete>
+
+	<!-- 답글 -->
+	<update id="increaseOrd" parameterType="map">
+<![CDATA[ 
+UPDATE `TABLE` SET
+ORD = ORD + 1
+WHERE GRP = #{grp} AND ORD >= #{ord}
+]]>
+	</update>
+	<insert id="replyinsert" parameterType="map">
+		<!--requesetparam으로 ARticlecontroller 에서 넘김 map을 받을 준비 -->
+		INSERT INTO `TABLE`
+		(ID, TITLE, CONTENT, HIT, WRITER, WRITE_DATE, GRP, ORD, LEVEL)
+		VALUES
+		(NULL, #{title}, #{content}, 0,
+		#{writer}, NOW(), #{grp}, #{ord}, #{level})
+	</insert>
+	<update id="updateHit" parameterType="_int">
+		UPDATE `TABLE` SET
+		HIT = HIT + 1
+		WHERE ID = #{value}
+	</update>
+	<select id="select" resultType="map">
+		SELECT ID, TITLE, CONTENT, HIT
+		, WRITER, WRITE_DATE
+		, GRP, ORD, LEVEL
+		FROM `TABLE`
+		ORDER BY GRP DESC, ORD ASC
+	</select>
+
+	<select id="findMaxId" resultType="_int">
+		SELECT MAX(ID)
+		FROM `TABLE`
+	</select>
+	<!-- 그룹번호를 Maxid의 int 값과 동일하게 맞춤  -->
+	<update id="updateByGrp" parameterType="map">
+		UPDATE `TABLE` SET
+		GRP = #{grp}
+		WHERE ID = #{maxId}
+	</update>	
+</mapper>	
