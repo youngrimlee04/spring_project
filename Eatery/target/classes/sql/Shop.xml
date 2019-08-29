@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="shop">
+	<insert id="save" parameterType="map">
+	<!--mybatis는 ? 안쓰고 #{}로 씀  -->
+		INSERT INTO SHOP (ID, NAME, ADDRESS, LAT, LNG, CRE_DATE)
+		VALUES (NULL, #{name}, #{address}, #{lat}, #{lng}, NOW())
+	</insert>
+	
+	<!--mybatis는 findall 오버로딩 안됨, shift + Alt + A로 열편집  -->
+	<select id="findAll" resultType="map" parameterType="map">
+	<![CDATA[
+	SELECT S.*, SI.FILE_NM
+		 , (6371*acos(cos(radians(#{lat}))
+			*cos(radians(LAT))*cos(radians(LNG) 
+		  -radians(#{lng}))+sin(radians(#{lat}))
+			*sin(radians(LAT)))) AS distance
+		  FROM SHOP S
+		  LEFT OUTER JOIN SHOP_IMG SI
+		    ON S.ID= SI.SHOP_ID
+		   AND SI.ORD = 1
+		 HAVING distance <= #{distance}
+		 ]]>
+	</select>
+</mapper>	
