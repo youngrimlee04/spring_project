@@ -39,7 +39,13 @@ public class MainService {
 		return resultMap;
 	}
 	
-	public List<Map<String, Object>> getShopList() {
+	public List<Map<String, Object>> getShopList(Map<String, Object> map) {
+		String lat = (String)map.get("lat");
+		String lng = (String)map.get("lng");
+		String distance = (String)map.get("distance");
+		if(lat !=null && lng !=null && distance !=null) {
+			return shopDao.findAll(map);
+		}
 		return shopDao.findAll();
 	}
 
@@ -52,11 +58,3 @@ public class MainService {
 		return resultMap;
 	}
 }
-
-
-
-
-
-
-
-

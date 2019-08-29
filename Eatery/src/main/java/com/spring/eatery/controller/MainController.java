@@ -66,8 +66,8 @@ public class MainController {
 	}
 
 	@RequestMapping(value = "shop", method = RequestMethod.GET)
-	public String shoplist(Model model) {
-		model.addAttribute("list", mainService.getShopList()); // 등록된 매장 조회 해서 list의 형태로 shoplist에 돌려줌
+	public String shoplist(Model model, @RequestParam Map<String, Object> map) {
+		model.addAttribute("list", mainService.getShopList(map)); // 등록된 매장 조회 해서 list의 형태로 shoplist에 돌려줌
 		return "shoplist";
 	}
 	
@@ -77,9 +77,5 @@ public class MainController {
 		return "shop";
 	}
 }
-
-
-
-
 
 
