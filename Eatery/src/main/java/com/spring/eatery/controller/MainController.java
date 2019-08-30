@@ -3,6 +3,7 @@ package com.spring.eatery.controller;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -69,6 +70,22 @@ public class MainController {
 	public String shoplist(Model model, @RequestParam Map<String, Object> map) {
 		model.addAttribute("list", mainService.getShopList(map)); // 등록된 매장 조회 해서 list의 형태로 shoplist에 돌려줌
 		return "shoplist";
+	}
+	
+	@RequestMapping(value = "shop2", method = RequestMethod.GET)
+	public String shoplist2(Model model, @RequestParam Map<String, Object> map) {
+		// model.addAttribute("list", mainService.getShopList(map)); 빈 껍데기 주기
+		return "shoplist2";
+	}
+	
+	@RequestMapping(value = "data", method = RequestMethod.GET) // AJAX로 요청하고 결과를 받는 메서드, 보통 Map 씀
+	@ResponseBody
+	public Map<String, Object> data(Model model, 
+			@RequestParam Map<String, Object> map) {
+		model.addAttribute("list", mainService.getShopList(map)); 
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("list", mainService.getShopList(map));
+		return resultMap;
 	}
 	
 	@RequestMapping(value = "shop/{id}", method = RequestMethod.GET)
